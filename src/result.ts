@@ -1,7 +1,5 @@
 import * as cheerio from 'cheerio';
 
-
-
 async function Result(): Promise<void> {
     const response = await fetch("https://sarkariresult.com.cm/result/", {
         "headers": {
