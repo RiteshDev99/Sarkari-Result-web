@@ -36,11 +36,13 @@ async function Syllabus(): Promise<void> {
                 text,
                 link
             });
+            
+
         }
     );
 }
 
-Syllabus();
+
 
 
 

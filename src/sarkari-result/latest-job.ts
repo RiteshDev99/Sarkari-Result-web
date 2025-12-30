@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 
-async function latestJob(): Promise<void> {
+export async function latestJob(): Promise<void> {
     const response = await fetch("https://sarkariresult.com.cm/latest-jobs/");
     const res = await response.text();
 

@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 
-async function Result(): Promise<void> {
+export async function AllResult(): Promise<void> {
     const response = await fetch("https://sarkariresult.com.cm/result/", {
         "headers": {
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
@@ -41,7 +41,6 @@ async function Result(): Promise<void> {
     
 }
 
-Result();
 
 
 
