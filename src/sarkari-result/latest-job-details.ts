@@ -1,8 +1,9 @@
 import * as cheerio from "cheerio";
+import {latestJob} from "./latest-job";
 
-async function latestJobDetails() {
+async function latestJobDetails(link: string): Promise<void> {
     const response = await fetch(
-        "https://sarkariresult.com.cm/ssc-gd-constable-recruitment-2026-apply-online-chk/"
+        `${link}`
     );
 
     const html = await response.text();
@@ -108,4 +109,22 @@ async function latestJobDetails() {
     console.log(JSON.stringify(jobData, null, 2));
 }
 
-latestJobDetails();
+
+//
+// async function run() {
+//     const jobs = await latestJob(); 
+//
+//     if (!jobs.length) {
+//         throw new Error("No jobs found");
+//     }
+//
+//     const firstJobLink = jobs[3].link;
+//
+//     if (!firstJobLink) {
+//         throw new Error("Job link missing");
+//     }
+//
+//     await latestJobDetails(firstJobLink);
+// }
+//
+// run();

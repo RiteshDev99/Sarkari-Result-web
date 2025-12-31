@@ -1,23 +1,28 @@
-import * as cheerio from 'cheerio';
+import * as cheerio from "cheerio";
 
-export async function latestJob(): Promise<void> {
-    const response = await fetch("https://sarkariresult.com.cm/latest-jobs/");
-    const res = await response.text();
-
-    const $ = cheerio.load(res);
-
-    $('ul.latest-posts-last-date li').each(
-        (index: number, element) => {
-            const text = $(element).text().trim();
-            const link = $(element).find('a').attr('href');
-
-            console.log({
-                index,
-                text,
-                link
-            });
-        }
-    );
+interface LatestJob {
+    title: string;
+    link: string | null;
 }
 
-latestJob();
+export async function latestJob(): Promise<LatestJob[]> {
+    const response = await fetch("https://sarkariresult.com.cm/latest-jobs/");
+    const html = await response.text();
+
+    const $ = cheerio.load(html);
+
+    const jobs: LatestJob[] = [];
+
+    $("ul.latest-posts-last-date li").each((_, element) => {
+        const title = $(element).text().trim();
+        const link = $(element).find("a").attr("href") ?? null;
+
+        jobs.push({
+            title,
+            link,
+        });
+    });
+
+    return jobs;
+}
+
