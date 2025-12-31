@@ -1,9 +1,18 @@
 import * as cheerio from "cheerio";
 import {latestJob} from "./latest-job";
 
-async function latestJobDetails(link: string): Promise<void> {
+
+
+interface vacancyType {
+    category: string;
+    male: string;
+    female: string;
+}
+
+async function latestJobDetails(): Promise<void> {
     const response = await fetch(
-        `${link}`
+        // `${link}`
+        "https://sarkariresult.com.cm/ssc-gd-constable-recruitment-2026-apply-online-chk/"
     );
 
     const html = await response.text();
@@ -46,22 +55,45 @@ async function latestJobDetails(link: string): Promise<void> {
         .each((_, el) => {
             ageLimit.push($(el).text().trim());
         });
-    
-    const vacancy: any[] = [];
 
-    $("table")
-        .first()
-        .find("tr")
-        .slice(2)
-        .each((_, row) => {
-            const cols = $(row).find("td");
-            vacancy.push({
-                category: $(cols[1]).text().trim(),
-                male: $(cols[2]).text().trim(),
-                female: $(cols[3]).text().trim(),
-            });
-        });
+    const vacancy: vacancyType[] = [];
+
+    const vacancyTable = $("table").filter((_, table) =>
+        $(table).text().includes("Category Wise Vacancy")
+    );
     
+
+    vacancyTable.find("tr").each((_, row) => {
+        const cols = $(row).find("td");
+
+        // skip empty rows
+        if (cols.length === 0) return;
+
+        // skip header row explicitly
+        const categoryText = cols.eq(cols.length === 4 ? 1 : 0).text().trim();
+        if (categoryText === "Category") return;
+
+        // first data row (with rowspan)
+        if (cols.length === 4) {
+            vacancy.push({
+                category: cols.eq(1).text().trim(),
+                male: cols.eq(2).text().trim(),
+                female: cols.eq(3).text().trim(),
+            });
+        }
+
+        // remaining rows
+        else if (cols.length === 3) {
+            vacancy.push({
+                category: cols.eq(0).text().trim(),
+                male: cols.eq(1).text().trim(),
+                female: cols.eq(2).text().trim(),
+            });
+        }
+    });
+    
+
+
     const eligibility: string[] = [];
     $("strong:contains('Eligibility Criteria')")
         .closest("table")
@@ -77,21 +109,38 @@ async function latestJobDetails(link: string): Promise<void> {
         .each((_, el) => {
             selectionProcess.push($(el).text().trim());
         });
-    
-    const importantLinks: any[] = [];
-    $("table")
-        .last()
-        .find("tr")
-        .each((_, row) => {
-            const cols = $(row).find("td");
-            if (cols.length === 2) {
-                importantLinks.push({
-                    title: $(cols[0]).text().trim(),
-                    url: $(cols[1]).find("a").attr("href"),
-                });
-            }
-        });
 
+    const importantLinks: { title: string; link: string }[] = [];
+
+// STEP 1: find the correct table by CONTENT
+    const importantLinksTable = $("table").filter((_, table) =>
+        $(table).find("a[href]").length > 0 &&
+        $(table).text().includes("Apply Online")
+    ).first();
+
+// safety check
+    if (!importantLinksTable.length) {
+        console.error("❌ Important Links table not found");
+    }
+
+// STEP 2: extract rows
+    importantLinksTable.find("tr").each((_, row) => {
+        const cols = $(row).find("td");
+
+        // table ALWAYS has exactly 2 columns
+        if (cols.length !== 2) return;
+
+        const title = cols.eq(0).text().replace(/\s+/g, " ").trim();
+        const link = cols.eq(1).find("a").attr("href");
+
+        if (!title || !link) return;
+
+        importantLinks.push({
+            title,
+            link,
+        });
+    });
+    
     const jobData = {
         title,
         postDate,
@@ -108,6 +157,9 @@ async function latestJobDetails(link: string): Promise<void> {
 
     console.log(JSON.stringify(jobData, null, 2));
 }
+
+
+latestJobDetails()
 
 
 //
