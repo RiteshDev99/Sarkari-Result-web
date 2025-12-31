@@ -9,10 +9,10 @@ interface vacancyType {
     female: string;
 }
 
-async function latestJobDetails(): Promise<void> {
+async function latestJobDetails(link:string): Promise<void> {
     const response = await fetch(
-        // `${link}`
-        "https://sarkariresult.com.cm/ssc-gd-constable-recruitment-2026-apply-online-chk/"
+        `${link}`
+        // "https://sarkariresult.com.cm/ssc-gd-constable-recruitment-2026-apply-online-chk/"
     );
 
     const html = await response.text();
@@ -120,7 +120,7 @@ async function latestJobDetails(): Promise<void> {
 
 // safety check
     if (!importantLinksTable.length) {
-        console.error("❌ Important Links table not found");
+        console.error("Important Links table not found");
     }
 
 // STEP 2: extract rows
@@ -159,24 +159,24 @@ async function latestJobDetails(): Promise<void> {
 }
 
 
-latestJobDetails()
+// latestJobDetails()
 
 
-//
-// async function run() {
-//     const jobs = await latestJob(); 
-//
-//     if (!jobs.length) {
-//         throw new Error("No jobs found");
-//     }
-//
-//     const firstJobLink = jobs[3].link;
-//
-//     if (!firstJobLink) {
-//         throw new Error("Job link missing");
-//     }
-//
-//     await latestJobDetails(firstJobLink);
-// }
-//
-// run();
+
+async function run() {
+    const jobs = await latestJob(); 
+
+    if (!jobs.length) {
+        throw new Error("No jobs found");
+    }
+
+    const firstJobLink = jobs[2].link;
+
+    if (!firstJobLink) {
+        throw new Error("Job link missing");
+    }
+
+    await latestJobDetails(firstJobLink);
+}
+
+run();

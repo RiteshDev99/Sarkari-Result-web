@@ -22,7 +22,11 @@ export async function latestJob(): Promise<LatestJob[]> {
             link,
         });
     });
-
+    console.log(jobs);
     return jobs;
 }
+
+
+
+latestJob()
 
