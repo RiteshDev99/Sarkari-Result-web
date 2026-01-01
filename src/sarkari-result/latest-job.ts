@@ -8,7 +8,6 @@ interface LatestJob {
 export async function latestJob(): Promise<LatestJob[]> {
     const response = await fetch("https://sarkariresult.com.cm/latest-jobs/");
     const html = await response.text();
-
     const $ = cheerio.load(html);
 
     const jobs: LatestJob[] = [];
@@ -22,11 +21,11 @@ export async function latestJob(): Promise<LatestJob[]> {
             link,
         });
     });
-    console.log(jobs);
+    // console.log(jobs);
     return jobs;
 }
 
 
 
-latestJob()
+// latestJob()
 

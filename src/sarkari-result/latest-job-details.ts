@@ -159,9 +159,6 @@ async function latestJobDetails(link:string): Promise<void> {
 }
 
 
-// latestJobDetails()
-
-
 
 async function run() {
     const jobs = await latestJob(); 
@@ -170,7 +167,7 @@ async function run() {
         throw new Error("No jobs found");
     }
 
-    const firstJobLink = jobs[2].link;
+    const firstJobLink = jobs[3].link;
 
     if (!firstJobLink) {
         throw new Error("Job link missing");
