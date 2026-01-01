@@ -1,8 +1,8 @@
-import {latestJob} from "./latest-job";
-import {Admission} from "./admission";
-import {AdmitCard} from "./admit-card";
-import {AnswerKey} from "./answer-key";
-import {AllResult} from "./result";
+import {latestJob} from "./latest-job/latest-job";
+import {Admission} from "./admission/admission";
+import {AdmitCard} from "./admit-card/admit-card";
+import {AnswerKey} from "./answer-key/answer-key";
+import {AllResult} from "./result/result";
 
 async function main () {
     // await Admission()
