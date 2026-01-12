@@ -167,7 +167,7 @@ async function run() {
         throw new Error("No jobs found");
     }
 
-    const firstJobLink = jobs[3].link;
+    const firstJobLink = jobs[0].link;
 
     if (!firstJobLink) {
         throw new Error("Job link missing");
